@@ -1,0 +1,71 @@
+﻿@{
+    ViewData["Title"] = "Books ABM";
+}
+
+<div id="app" class="mt-4">
+    <h1>Libros</h1>
+
+    <!-- Botón Crear -->
+    <button class="btn btn-primary mb-3" v-on:click="fetchBooks">Libros</button>
+    <button class="btn btn-primary mb-3" v-on:click="openCreateModal">Nuevo Libro</button>
+
+    <div v-if="loading" class="position-fixed top-0 start-0 w-100 vh-100 d-flex justify-content-center align-items-center bg-dark bg-opacity-50 text-white">
+        <h2>Esperando... {{ loadingSeconds }} seg{{ loadingSeconds > 1 ? 's' : '' }}</h2>
+    </div>
+
+    <!-- Tabla de películas -->
+    <table class="table table-striped" v-if="books">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Titulo</th>
+                <th>Autor</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="book in books" :key="book.id">
+                <td>{{ book.id }}</td>
+                <td>{{ book.title }}</td>
+                <td>{{ book.author }}</td>
+                <td>
+                    <button class="btn btn-sm btn-warning me-1" v-on:click="openEditModal(book)">Editar</button>
+                    <button class="btn btn-sm btn-danger" v-on:click="deleteBook(book.id)">Eliminar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Modal Crear/Editar -->
+    <div class="modal" tabindex="-1" :class="{ 'show d-block': showModal }">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ editMode ? 'Editar Libro' : 'Nueva Libro' }}</h5>
+                    <button type="button" class="btn-close" v-on:click="closeModal"></button>
+                </div>
+                <div class="modal-body">
+                    <form v-on:submit.prevent="saveBook">
+                        <div class="mb-3">
+                            <label class="form-label">Id</label>
+                            <input type="text" class="form-control" v-model="currentBook.id" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Titulo</label>
+                            <input type="text" class="form-control" v-model="currentBook.title" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Autor</label>
+                            <input type="text" class="form-control" v-model="currentBook.author" required />
+                        </div>
+                        <button type="submit" class="btn btn-primary">{{ editMode ? 'Actualizar' : 'Crear' }}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/book.js"></script>
+}

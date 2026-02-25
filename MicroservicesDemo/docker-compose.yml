@@ -1,0 +1,266 @@
+# version: '3.8'
+
+# services:
+#   # identity-api:
+#   #   build:
+#   #     context: ./Identity.Api
+#   #   container_name: identity-api
+#   #   ports:
+#   #    - "5006:80"
+#   #   environment:
+#   #   - ASPNETCORE_ENVIRONMENT=Development
+#   #   - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=IdentityDb;User Id=sa;Password=Your_password123;TrustServerCertificate=True;
+#   #   - Jwt__Key=ac7dd6cee584bfcc34ddb0b7a623db1e
+#   #   - Jwt__Issuer=MicroservicesApp
+#   #   - Jwt__Audience=MicroservicesUsers
+#   #   depends_on:
+#   #   - sqlserver
+#   #   networks:
+#   #   - microservices-network
+#   #   volumes:
+#   #   - ./logs/identity:/app/Logs
+
+#   movies-api:
+#     build:
+#       context: ./Movies.Api
+#     container_name: movies-api
+#     ports:
+#       - "5001:80"
+#     environment:
+#       - ASPNETCORE_ENVIRONMENT=Development
+#     depends_on:
+#       - mongo
+#       - redis
+#     networks:
+#       - microservices-network
+#     volumes:
+#       - ./logs/movies:/app/Logs
+
+#   books-api:
+#     build:
+#       context: ./Books.Api
+#     container_name: books-api
+#     ports:
+#       - "5002:80"
+#     environment:
+#       - ASPNETCORE_ENVIRONMENT=Development
+#     depends_on:
+#       - mongo
+#       - redis
+#     networks:
+#       - microservices-network
+#     volumes:
+#       - ./logs/books:/app/Logs
+
+#   reviews-api:
+#     build:
+#       context: ./Reviews.Api
+#     container_name: reviews-api
+#     ports:
+#       - "5003:80"
+#     environment:
+#       - ASPNETCORE_ENVIRONMENT=Development
+#     depends_on:
+#       - mongo
+#       - redis
+#     networks:
+#       - microservices-network
+#     volumes:
+#       - ./logs/reviews:/app/Logs
+
+#   gateway-api:
+#     build:
+#       context: ./Gateway.Api
+#     container_name: gateway-api
+#     ports:
+#       - "5000:80"
+#     environment:
+#       - ASPNETCORE_ENVIRONMENT=Development
+#     depends_on:
+#       - movies-api
+#       - books-api
+#       - reviews-api
+#       # - identity-api
+#     networks:
+#       - microservices-network
+#     volumes:
+#       - ./logs/gateway:/app/Logs
+
+#   mongo:
+#     image: mongo:7
+#     container_name: mongo
+#     ports:
+#       - "27017:27017"
+#     volumes:
+#       - mongo_data:/data/db
+#     networks:
+#       - microservices-network
+
+#   sqlserver:
+#     image: mcr.microsoft.com/mssql/server:2022-latest
+#     container_name: sqlserver
+#     environment:
+#       - SA_PASSWORD=Your_password123
+#       - ACCEPT_EULA=Y
+#     ports:
+#       - "1434:1433"
+#     volumes:
+#       - sql_data:/var/opt/mssql
+#     networks:
+#       - microservices-network
+
+#   redis:
+#     image: redis:7
+#     container_name: redis
+#     ports:
+#       - "6379:6379"
+#     networks:
+#       - microservices-network
+
+# volumes:
+#   mongo_data:
+#   sql_data:
+
+# networks:
+#   microservices-network:
+#     driver: bridge
+
+
+version: '3.8'
+
+services:
+  identity-api:
+    build:
+      context: ./Identity.Api
+    container_name: identity-api
+    ports:
+      - "5006:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=IdentityDb;User Id=sa;Password=Your_password123;TrustServerCertificate=True;
+      - Jwt__Key=ac7dd6cee584bfcc34ddb0b7a623db1e
+      - Jwt__Issuer=MicroservicesApp
+      - Jwt__Audience=MicroservicesUsers
+    depends_on:
+      - sqlserver
+    networks:
+      - microservices-network
+    volumes:
+      - ./logs/identity:/app/Logs
+
+  movies-api:
+    build:
+      context: ./Movies.Api
+    container_name: movies-api
+    ports:
+      - "5001:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Jwt__Key=ac7dd6cee584bfcc34ddb0b7a623db1e
+      - Jwt__Issuer=MicroservicesApp
+      - Jwt__Audience=MicroservicesUsers
+    depends_on:
+      - mongo
+      - redis
+    networks:
+      - microservices-network
+    volumes:
+      - ./logs/movies:/app/Logs
+
+  books-api:
+    build:
+      context: ./Books.Api
+    container_name: books-api
+    ports:
+      - "5002:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Jwt__Key=ac7dd6cee584bfcc34ddb0b7a623db1e
+      - Jwt__Issuer=MicroservicesApp
+      - Jwt__Audience=MicroservicesUsers
+    depends_on:
+      - mongo
+      - redis
+    networks:
+      - microservices-network
+    volumes:
+      - ./logs/books:/app/Logs
+
+  reviews-api:
+    build:
+      context: ./Reviews.Api
+    container_name: reviews-api
+    ports:
+      - "5003:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Jwt__Key=ac7dd6cee584bfcc34ddb0b7a623db1e
+      - Jwt__Issuer=MicroservicesApp
+      - Jwt__Audience=MicroservicesUsers
+    depends_on:
+      - mongo
+      - redis
+    networks:
+      - microservices-network
+    volumes:
+      - ./logs/reviews:/app/Logs
+
+  gateway-api:
+    build:
+      context: ./Gateway.Api
+    container_name: gateway-api
+    ports:
+      - "5000:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Jwt__Key=ac7dd6cee584bfcc34ddb0b7a623db1e
+      - Jwt__Issuer=MicroservicesApp
+      - Jwt__Audience=MicroservicesUsers
+    depends_on:
+      - movies-api
+      - books-api
+      - reviews-api
+      - identity-api
+    networks:
+      - microservices-network
+    volumes:
+      - ./logs/gateway:/app/Logs
+
+  mongo:
+    image: mongo:7
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - microservices-network
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      - SA_PASSWORD=Your_password123
+      - ACCEPT_EULA=Y
+    ports:
+      - "1434:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+    networks:
+      - microservices-network
+
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - microservices-network
+
+volumes:
+  mongo_data:
+  sql_data:
+
+networks:
+  microservices-network:
+    driver: bridge

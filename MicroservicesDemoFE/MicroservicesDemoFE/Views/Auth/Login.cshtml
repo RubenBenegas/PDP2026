@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+
+<div id="loginApp" class="mt-5 container">
+    <h2>Login</h2>
+
+    <div class="mb-3">
+        <label>Email</label>
+        <input class="form-control" v-model="email" />
+    </div>
+
+    <div class="mb-3">
+        <label>Password</label>
+        <input type="password" class="form-control" v-model="password" />
+    </div>
+
+    <button class="btn btn-primary" v-on:click="login">Ingresar</button>
+
+    <div class="text-danger mt-3" v-if="error">
+        {{ error }}
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/login.js"></script>
+}
